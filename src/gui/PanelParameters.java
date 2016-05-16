@@ -53,35 +53,7 @@ public class PanelParameters extends PanelAtributesValue {
         jComboBoxSelectionControllers.addActionListener(new JComboxSelectionControllers_ActionAdapter(this));
 
         
-        labels.add(new JLabel("Seed: "));
-        valueComponents.add(jTextFieldSeed);
-        jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
-
-        labels.add(new JLabel("Population size: "));
-        valueComponents.add(jTextFieldN);
-        jTextFieldN.addKeyListener(new IntegerTextField_KeyAdapter(null));
-
-        labels.add(new JLabel("# of generations: "));
-        valueComponents.add(jTextFieldGenerations);
-        jTextFieldGenerations.addKeyListener(new IntegerTextField_KeyAdapter(null));
-
-        labels.add(new JLabel("Selection method: "));
-        valueComponents.add(jComboBoxSelectionMethods);
-        jComboBoxSelectionMethods.addActionListener(new JComboBoxSelectionMethods_ActionAdapter(this));
-
-        labels.add(new JLabel("Tournament size: "));
-        valueComponents.add(jTextFieldTournamentSize);
-        jTextFieldTournamentSize.addKeyListener(new IntegerTextField_KeyAdapter(null));
-
-        labels.add(new JLabel("Recombination method: "));
-        valueComponents.add(jComboBoxRecombinationMethods);
-
-        labels.add(new JLabel("Recombination prob.: "));
-        valueComponents.add(jTextFieldProbRecombination);
-
-        labels.add(new JLabel("Mutation prob.: "));
-        valueComponents.add(jTextFieldProbMutation);
-
+        
         //MORE PARAMETERS?
         
         configure();
@@ -133,6 +105,7 @@ public class PanelParameters extends PanelAtributesValue {
     	case (1):{
     		
     		setComponentsForRandomAdHocSolution(index);
+    		
     		testCase = index;
     	}break;
     	
@@ -150,6 +123,36 @@ public class PanelParameters extends PanelAtributesValue {
     }
     
     public void setComponentsForRandomAdHocSolution(int index){
+    	
+    	
+    	labels.add(new JLabel("Seed: "));
+        valueComponents.add(jTextFieldSeed);
+        jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
+
+        labels.add(new JLabel("Population size: "));
+        valueComponents.add(jTextFieldN);
+        jTextFieldN.addKeyListener(new IntegerTextField_KeyAdapter(null));
+
+        labels.add(new JLabel("# of generations: "));
+        valueComponents.add(jTextFieldGenerations);
+        jTextFieldGenerations.addKeyListener(new IntegerTextField_KeyAdapter(null));
+
+        labels.add(new JLabel("Selection method: "));
+        valueComponents.add(jComboBoxSelectionMethods);
+        jComboBoxSelectionMethods.addActionListener(new JComboBoxSelectionMethods_ActionAdapter(this));
+
+        labels.add(new JLabel("Tournament size: "));
+        valueComponents.add(jTextFieldTournamentSize);
+        jTextFieldTournamentSize.addKeyListener(new IntegerTextField_KeyAdapter(null));
+
+        labels.add(new JLabel("Recombination method: "));
+        valueComponents.add(jComboBoxRecombinationMethods);
+
+        labels.add(new JLabel("Recombination prob.: "));
+        valueComponents.add(jTextFieldProbRecombination);
+
+        labels.add(new JLabel("Mutation prob.: "));
+        valueComponents.add(jTextFieldProbMutation);
 
     	jTextFieldSeed.setEnabled(index != 0);
     	jTextFieldGenerations.setEnabled(false);
@@ -225,4 +228,37 @@ class IntegerTextField_KeyAdapter implements KeyListener {
             e.consume();
         }
     }
+   
 }
+
+/*
+ * labels.add(new JLabel("Seed: "));
+        valueComponents.add(jTextFieldSeed);
+        jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
+
+        labels.add(new JLabel("Population size: "));
+        valueComponents.add(jTextFieldN);
+        jTextFieldN.addKeyListener(new IntegerTextField_KeyAdapter(null));
+
+        labels.add(new JLabel("# of generations: "));
+        valueComponents.add(jTextFieldGenerations);
+        jTextFieldGenerations.addKeyListener(new IntegerTextField_KeyAdapter(null));
+
+        labels.add(new JLabel("Selection method: "));
+        valueComponents.add(jComboBoxSelectionMethods);
+        jComboBoxSelectionMethods.addActionListener(new JComboBoxSelectionMethods_ActionAdapter(this));
+
+        labels.add(new JLabel("Tournament size: "));
+        valueComponents.add(jTextFieldTournamentSize);
+        jTextFieldTournamentSize.addKeyListener(new IntegerTextField_KeyAdapter(null));
+
+        labels.add(new JLabel("Recombination method: "));
+        valueComponents.add(jComboBoxRecombinationMethods);
+
+        labels.add(new JLabel("Recombination prob.: "));
+        valueComponents.add(jTextFieldProbRecombination);
+
+        labels.add(new JLabel("Mutation prob.: "));
+        valueComponents.add(jTextFieldProbMutation);
+
+ */

@@ -11,7 +11,7 @@ public class Main {
 
     public Main() {
 
-	StarterFrame frame = new StarterFrame();
+	MainFrame frame = new MainFrame();
 
 	// Center the window
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
