@@ -21,12 +21,13 @@ public class PanelSimulation extends JPanel implements EnvironmentListener {
     public static final int CELL_SIZE = 20;
     public static final int GRID_TO_PANEL_GAP = 20;
     MainFrame mainFrame;
+
     private Environment environment;
     private Image image;
     JPanel environmentPanel = new JPanel();
     final JButton buttonSimulate = new JButton("Simulate");
 
-    public PanelSimulation(MainFrame mainFrame) {
+    public PanelSimulation(MainFrame frame) {
         this.mainFrame = mainFrame;
         environmentPanel.setPreferredSize(new Dimension(PANEL_SIZE, PANEL_SIZE));
         setLayout(new BorderLayout());
