@@ -16,11 +16,11 @@ public class PursuitDomainExperimentsFactory extends ExperimentsFactory {
 
     private int populationSize;
     private int maxGenerations;
-    private SelectionMethod<PredatorIndividual, GAPursuitDomainProblem> selection;
+    private SelectionMethod<PredatorIndividual, GeneticAProblem> selection;
     private Recombination<PredatorIndividual> recombination;
     private Mutation<PredatorIndividual> mutation;
-    private GAPursuitDomainProblem problem;
-    private Experiment<PursuitDomainExperimentsFactory, GAPursuitDomainProblem> experiment;
+    private GeneticAProblem problem;
+    private Experiment<PursuitDomainExperimentsFactory, GeneticAProblem> experiment;
 
     public PursuitDomainExperimentsFactory(File configFile) throws IOException {
         super(configFile);
@@ -60,7 +60,7 @@ public class PursuitDomainExperimentsFactory extends ExperimentsFactory {
         }
 
         //PROBLEM 
-        problem = GAPursuitDomainProblem.buildProblemFromFile(new File(getParameterValue("Problem file")));
+        problem = GeneticAProblem.buildProblemFromFile(new File(getParameterValue("Problem file")));
 
         String textualRepresentation = buildTextualExperiment();
 
@@ -78,7 +78,7 @@ public class PursuitDomainExperimentsFactory extends ExperimentsFactory {
 
     @Override
     public GeneticAlgorithm generateGAInstance(int seed) {
-        GeneticAlgorithm<PredatorIndividual, GAPursuitDomainProblem> ga = 
+        GeneticAlgorithm<PredatorIndividual, GeneticAProblem> ga = 
                 new GeneticAlgorithm<>(
                     populationSize,
                     maxGenerations,

@@ -9,18 +9,14 @@ import java.util.Random;
 public class Environment {
 
 	// Control TestCase
-	private int testCase;
-	private static final int RANDOM_CONTROLLER = 1;
-	private static final int ADHOC_CONTROLLER = 2;
-	private static final int HOMOGEN_CONTROLLER = 3;
-	private static final int HETEROGEN_CONTROLLER = 4;
-
+	
 	public Random random;
 	private final Cell[][] grid;
 	private final List<Predator> predators;
 	private final Prey prey;
 	private final int maxIterations;
 	private long seed;
+	private TestCase testCase = TestCase.getInstace();
 
 	// MORE ATTRIBUTES?
 
@@ -43,6 +39,7 @@ public class Environment {
 		// (SEE METHOD initializeAgentsPositions).
 		prey = new Prey(null, probPreyRests, seed);
 		predators = initPredatorControllers(numPredators);
+		initializeAgentsPositions(seed);
 
 	}
 
@@ -55,17 +52,27 @@ public class Environment {
 	{
 		ArrayList<Predator> list = new ArrayList<Predator>(numP);
 		
-		switch (testCase) {
-		case RANDOM_CONTROLLER: {
-			RandomController r = new RandomController(seed);
-			
-			for(int i = 0; i < numP; i++)
-			{
-				list.add(new Predator(null,r));
-			}
+		Controller r;
+		
+		switch (testCase.getCurrent()) {
+		case TestCase.RANDOM_CONTROLLER: {
+			r = new RandomController(seed);
 
 		}break;
+		
+		case TestCase.ADHOC_CONTROLLER: {
+			r = new AdHocController(this);
 		}
+		default :{
+			r = new RandomController(seed);
+		}
+		}
+		
+		for(int i = 0; i < numP; i++)
+		{
+			list.add(new Predator(null,r));
+		}
+		
 		return list;
 	}
 
@@ -105,7 +112,7 @@ public class Environment {
 			prey.act(this);
 			for(int j = 0; j < predators.size(); j++)
 			{
-			predators.get(i).act(this);			
+			predators.get(i).act(this);
 			}
 		}
 		

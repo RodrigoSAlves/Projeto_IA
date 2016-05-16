@@ -19,7 +19,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import pursuitDomain.PredatorIndividual;
-import pursuitDomain.GAPursuitDomainProblem;
+import pursuitDomain.TestCase;
+import pursuitDomain.GeneticAProblem;
 
 public class PanelParameters extends PanelAtributesValue {
 
@@ -42,18 +43,27 @@ public class PanelParameters extends PanelAtributesValue {
     JComboBox jComboBoxRecombinationMethods = new JComboBox(recombinationMethods);
     JTextField jTextFieldProbRecombination = new JTextField(PROB_RECOMBINATION, TEXT_FIELD_LENGHT);
     JTextField jTextFieldProbMutation = new JTextField(PROB_MUTATION, TEXT_FIELD_LENGHT);
-    int testCase;
+    private TestCase testCase = TestCase.getInstace();
+    
+    //Labels
+	JLabel lblSeed = new JLabel("Seed: ");
+	JLabel lblPopSize = new JLabel("Population size: ");
+	JLabel lblNumberGens = new JLabel("# of generations: ");
+	JLabel lblSelectMethod = new JLabel("Selection method: ");
+	JLabel lblTournmentSize = new JLabel("Tournament size: ");
+	JLabel lblRecombMethod = new JLabel("Recombination method: ");
+	JLabel lblRecombProb = new JLabel("Recombination prob.: ");
+	JLabel lblMutationProb = new JLabel("Mutation prob.: ");
+	JLabel lblTestControl = new JLabel("Test Controler: ");
     //MORE PARAMETERS?
     
     public PanelParameters() {
         title = "Genetic algorithm parameters";
         
-        labels.add(new JLabel("Test Controler: "));
+        labels.add(lblTestControl);
         valueComponents.add(jComboBoxSelectionControllers);
         jComboBoxSelectionControllers.addActionListener(new JComboxSelectionControllers_ActionAdapter(this));
 
-        
-        
         //MORE PARAMETERS?
         
         configure();
@@ -64,7 +74,7 @@ public class PanelParameters extends PanelAtributesValue {
         jTextFieldTournamentSize.setEnabled(jComboBoxSelectionMethods.getSelectedIndex() == 0);
     }
 
-    public SelectionMethod<PredatorIndividual, GAPursuitDomainProblem> getSelectionMethod() {
+    public SelectionMethod<PredatorIndividual, GeneticAProblem> getSelectionMethod() {
         switch (jComboBoxSelectionMethods.getSelectedIndex()) {
             case 0:
                 return new Tournament<>(
@@ -100,76 +110,153 @@ public class PanelParameters extends PanelAtributesValue {
     	
     	switch(index){
     	case (0):{
-    		setComponentsNoSolution();
+    		setComponentsForPanelParameters(index);
     	}break;
     	case (1):{
+    		setComponentsForPanelParameters(index);
     		
-    		setComponentsForRandomAdHocSolution(index);
-    		
-    		testCase = index;
+    		testCase.setCurrent(index);
     	}break;
     	
     	case (2):{
-    		setComponentsForRandomAdHocSolution(index);
-    		testCase = index;
+    		setComponentsForPanelParameters(index);
+    		testCase.setCurrent(index);
     	}break;
     	case (3):{
-    		
+    		setComponentsForPanelParameters(index);
+    		testCase.setCurrent(index);
     	}break;
     	case (4):{
-    		
+    		setComponentsForPanelParameters(index);
+    		testCase.setCurrent(index);
     	}break;
     	}
     }
     
-    public void setComponentsForRandomAdHocSolution(int index){
+    public void setComponentsForPanelParameters(int index){
     	
-    	
-    	labels.add(new JLabel("Seed: "));
-        valueComponents.add(jTextFieldSeed);
-        jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
+    	switch(index){
+	    	case (0):{
+	    		removeParameters();
+	            this.configure();
+	            this.revalidate();
+	    	}break;
+	    	case (1):{
+	    		removeParameters();
+	    		labels.add(lblSeed);
+	            valueComponents.add(jTextFieldSeed);
+	            jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
+	            this.configure();
+	            this.revalidate();
+	    	}break;
+	    	
+	    	case (2):{
+	    		removeParameters();
+	        	labels.add(lblSeed);
+	            valueComponents.add(jTextFieldSeed);
+	            jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
+	            this.configure();
+	            this.revalidate();
+	    	}break;
+	    	case (3):{
+	    		removeParameters();
+	        	labels.add(lblSeed);
+	            valueComponents.add(jTextFieldSeed);
+	            jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
+	            
+	    		labels.add(lblPopSize);
+	            valueComponents.add(jTextFieldN);
+	            jTextFieldN.addKeyListener(new IntegerTextField_KeyAdapter(null));
+	
+	            labels.add(lblNumberGens);
+	            valueComponents.add(jTextFieldGenerations);
+	            jTextFieldGenerations.addKeyListener(new IntegerTextField_KeyAdapter(null));
+	
+	            labels.add(lblSelectMethod);
+	            valueComponents.add(jComboBoxSelectionMethods);
+	            jComboBoxSelectionMethods.addActionListener(new JComboBoxSelectionMethods_ActionAdapter(this));
+	
+	            labels.add(lblTournmentSize);
+	            valueComponents.add(jTextFieldTournamentSize);
+	            jTextFieldTournamentSize.addKeyListener(new IntegerTextField_KeyAdapter(null));
+	
+	            labels.add(lblRecombMethod);
+	            valueComponents.add(jComboBoxRecombinationMethods);
+	
+	            labels.add(lblRecombProb);
+	            valueComponents.add(jTextFieldProbRecombination);
+	
+	            labels.add(lblMutationProb);
+	            valueComponents.add(jTextFieldProbMutation);
+	            this.configure();
+	            this.revalidate();
+	    		
+	    	}break;
+	    	case (4):{
+	    		removeParameters();
+	    		labels.add(lblSeed);
+	            valueComponents.add(jTextFieldSeed);
+	            jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
+	            
+	    		labels.add(lblPopSize);
+	            valueComponents.add(jTextFieldN);
+	            jTextFieldN.addKeyListener(new IntegerTextField_KeyAdapter(null));
+	
+	            labels.add(lblNumberGens);
+	            valueComponents.add(jTextFieldGenerations);
+	            jTextFieldGenerations.addKeyListener(new IntegerTextField_KeyAdapter(null));
+	
+	            labels.add(lblSelectMethod);
+	            valueComponents.add(jComboBoxSelectionMethods);
+	            jComboBoxSelectionMethods.addActionListener(new JComboBoxSelectionMethods_ActionAdapter(this));
+	
+	            labels.add(lblTournmentSize);
+	            valueComponents.add(jTextFieldTournamentSize);
+	            jTextFieldTournamentSize.addKeyListener(new IntegerTextField_KeyAdapter(null));
+	
+	            labels.add(lblRecombMethod);
+	            valueComponents.add(jComboBoxRecombinationMethods);
+	
+	            labels.add(lblRecombProb);
+	            valueComponents.add(jTextFieldProbRecombination);
+	
+	            labels.add(lblMutationProb);
+	            valueComponents.add(jTextFieldProbMutation);
+	            this.configure();
+	            this.revalidate();
+	    	}break;
+    	}
 
-        labels.add(new JLabel("Population size: "));
-        valueComponents.add(jTextFieldN);
-        jTextFieldN.addKeyListener(new IntegerTextField_KeyAdapter(null));
-
-        labels.add(new JLabel("# of generations: "));
-        valueComponents.add(jTextFieldGenerations);
-        jTextFieldGenerations.addKeyListener(new IntegerTextField_KeyAdapter(null));
-
-        labels.add(new JLabel("Selection method: "));
-        valueComponents.add(jComboBoxSelectionMethods);
-        jComboBoxSelectionMethods.addActionListener(new JComboBoxSelectionMethods_ActionAdapter(this));
-
-        labels.add(new JLabel("Tournament size: "));
-        valueComponents.add(jTextFieldTournamentSize);
-        jTextFieldTournamentSize.addKeyListener(new IntegerTextField_KeyAdapter(null));
-
-        labels.add(new JLabel("Recombination method: "));
-        valueComponents.add(jComboBoxRecombinationMethods);
-
-        labels.add(new JLabel("Recombination prob.: "));
-        valueComponents.add(jTextFieldProbRecombination);
-
-        labels.add(new JLabel("Mutation prob.: "));
-        valueComponents.add(jTextFieldProbMutation);
-
-    	jTextFieldSeed.setEnabled(index != 0);
-    	jTextFieldGenerations.setEnabled(false);
-		jTextFieldProbRecombination.setEnabled(false);
-		jTextFieldTournamentSize.setEnabled(false);
-		jComboBoxSelectionMethods.setEnabled(false);
-		jComboBoxRecombinationMethods.setEnabled(false);
-		jTextFieldN.setEnabled(false);
-		jTextFieldProbMutation.setEnabled(false);
-		
-		
-		
     }
-    public void setComponentsNoSolution(){
-    	jTextFieldSeed.setEnabled(false);
-    	setComponentsForRandomAdHocSolution(0);
-    }
+	private void removeParameters() {
+		labels.removeAll(labels);
+		valueComponents.removeAll(valueComponents);
+		this.removeAll();
+        this.configure();
+        this.revalidate();
+        labels.add(lblTestControl);
+        valueComponents.add(jComboBoxSelectionControllers);
+		labels.remove(lblSeed);
+		valueComponents.remove(jTextFieldSeed);
+		labels.remove(lblPopSize);
+		valueComponents.remove(jTextFieldN);
+		labels.remove(lblNumberGens);
+		valueComponents.remove(jTextFieldGenerations);
+		labels.remove(lblSelectMethod);
+		valueComponents.remove(jComboBoxSelectionMethods);
+		labels.remove(lblTournmentSize);
+		valueComponents.remove(jTextFieldTournamentSize);
+		labels.remove(lblRecombMethod);
+		valueComponents.remove(jComboBoxRecombinationMethods);
+		labels.remove(lblRecombProb);
+		valueComponents.remove(jTextFieldProbRecombination);
+		labels.remove(lblMutationProb);
+		valueComponents.remove(jTextFieldProbMutation);
+        this.configure();
+        this.revalidate();
+	}
+
+
 	public void actionPerformedSelectionController(ActionEvent e) {
 		updateComponentsBasedOnTestCase();
 	}
@@ -230,35 +317,3 @@ class IntegerTextField_KeyAdapter implements KeyListener {
     }
    
 }
-
-/*
- * labels.add(new JLabel("Seed: "));
-        valueComponents.add(jTextFieldSeed);
-        jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
-
-        labels.add(new JLabel("Population size: "));
-        valueComponents.add(jTextFieldN);
-        jTextFieldN.addKeyListener(new IntegerTextField_KeyAdapter(null));
-
-        labels.add(new JLabel("# of generations: "));
-        valueComponents.add(jTextFieldGenerations);
-        jTextFieldGenerations.addKeyListener(new IntegerTextField_KeyAdapter(null));
-
-        labels.add(new JLabel("Selection method: "));
-        valueComponents.add(jComboBoxSelectionMethods);
-        jComboBoxSelectionMethods.addActionListener(new JComboBoxSelectionMethods_ActionAdapter(this));
-
-        labels.add(new JLabel("Tournament size: "));
-        valueComponents.add(jTextFieldTournamentSize);
-        jTextFieldTournamentSize.addKeyListener(new IntegerTextField_KeyAdapter(null));
-
-        labels.add(new JLabel("Recombination method: "));
-        valueComponents.add(jComboBoxRecombinationMethods);
-
-        labels.add(new JLabel("Recombination prob.: "));
-        valueComponents.add(jTextFieldProbRecombination);
-
-        labels.add(new JLabel("Mutation prob.: "));
-        valueComponents.add(jTextFieldProbMutation);
-
- */

@@ -3,21 +3,22 @@ package pursuitDomain;
 public class TestCase {
 	
 	private static final TestCase instance = new TestCase();
-	private int testCase;
-	private static final int RANDOM_CONTROLLER = 1;
-	private static final int ADHOC_CONTROLLER = 2;
-	private static final int HOMOGEN_CONTROLLER = 3;
-	private static final int HETEROGEN_CONTROLLER = 4;
+	
+	public static final int RANDOM_CONTROLLER = 1;
+	public static final int ADHOC_CONTROLLER = 2;
+	public static final int HOMOGEN_CONTROLLER = 3;
+	public static final int HETEROGEN_CONTROLLER = 4;
+	private int current;
 	
 	public TestCase() {
 		
 	}
-	public int getTestCase(){
-		return testCase;
+	public int getCurrent(){
+		return current;
 	}
 	
-	public void setTestCase(int t){
-		testCase = t;
+	public void setCurrent(int t){
+		current = t;
 	}
 	public static TestCase getInstace(){
 		return instance;
