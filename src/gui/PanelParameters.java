@@ -44,6 +44,7 @@ public class PanelParameters extends PanelAtributesValue {
     JTextField jTextFieldProbRecombination = new JTextField(PROB_RECOMBINATION, TEXT_FIELD_LENGHT);
     JTextField jTextFieldProbMutation = new JTextField(PROB_MUTATION, TEXT_FIELD_LENGHT);
     private TestCase testCase = TestCase.getInstace();
+
     
     //Labels
 	JLabel lblSeed = new JLabel("Seed: ");
@@ -114,7 +115,6 @@ public class PanelParameters extends PanelAtributesValue {
     	}break;
     	case (1):{
     		setComponentsForPanelParameters(index);
-    		
     		testCase.setCurrent(index);
     	}break;
     	
@@ -316,4 +316,5 @@ class IntegerTextField_KeyAdapter implements KeyListener {
         }
     }
    
+
 }
