@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GAPursuitDomainProblem extends Problem implements GAProblem<PredatorIndividual> {
+public class GeneticAProblem extends Problem implements GAProblem<PredatorIndividual> {
 
     public static int NUM_PREDATOR_OUTPUTS = 2;
     
@@ -16,14 +16,15 @@ public class GAPursuitDomainProblem extends Problem implements GAProblem<Predato
    
     
 
-    public GAPursuitDomainProblem(int numPredatorHiddenUnits, int numEnvironmentRuns){
+    public GeneticAProblem(int numPredatorHiddenUnits, int numEnvironmentRuns){
     	super(numEnvironmentRuns);
     	
         this.predatorsNumInputs = 100; //THIS IS A FALSE NUMBER; PLEASE ADAPT TO YOUR CASE
         this.predatorsNumHiddenUnits = numPredatorHiddenUnits;
         this.predatorNumOutputs = NUM_PREDATOR_OUTPUTS;
         
-
+        
+        
         /*environment = new Environment(
                 environmentSize,
                 maxIterations,
@@ -37,15 +38,9 @@ public class GAPursuitDomainProblem extends Problem implements GAProblem<Predato
         return new PredatorIndividual(this, genomeSize /*COMPLETE?*/);
     }
 
-    public Environment getEnvironment() {
-        return environment;
-    }
-    
-    public int getNumEvironmentSimulations(){
-        return numEnvironmentRuns;
-    }
 
-    public static GAPursuitDomainProblem buildProblemFromFile(File file) throws IOException {
+
+    public static GeneticAProblem buildProblemFromFile(File file) throws IOException {
         java.util.Scanner f = new java.util.Scanner(file);
 
         List<String> lines = new LinkedList<>();
@@ -67,7 +62,7 @@ public class GAPursuitDomainProblem extends Problem implements GAProblem<Predato
         int numHiddenUnits = Integer.parseInt(parametersValues.get(4));
         int numEnvironmentRuns = Integer.parseInt(parametersValues.get(5));
 
-        return new GAPursuitDomainProblem(numHiddenUnits, numEnvironmentRuns);
+        return new GeneticAProblem(numHiddenUnits, numEnvironmentRuns);
     }
 
     @Override
@@ -86,5 +81,7 @@ public class GAPursuitDomainProblem extends Problem implements GAProblem<Predato
         sb.append(numEnvironmentRuns);
         return sb.toString();
     }
+
+
 
 }

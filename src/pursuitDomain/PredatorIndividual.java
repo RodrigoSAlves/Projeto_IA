@@ -2,9 +2,9 @@ package pursuitDomain;
 
 import ga.RealVectorIndividual;
 
-public class PredatorIndividual extends RealVectorIndividual<GAPursuitDomainProblem, PredatorIndividual> {
+public class PredatorIndividual extends RealVectorIndividual<GeneticAProblem, PredatorIndividual> {
 
-    public PredatorIndividual(GAPursuitDomainProblem problem, int size /*COMPLETE?*/) {
+    public PredatorIndividual(GeneticAProblem problem, int size /*COMPLETE?*/) {
         super(problem, size);
         //COMPLETE?
     }

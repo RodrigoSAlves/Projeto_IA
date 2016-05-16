@@ -19,7 +19,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import pursuitDomain.PredatorIndividual;
-import pursuitDomain.GAPursuitDomainProblem;
+import pursuitDomain.TestCase;
+import pursuitDomain.GeneticAProblem;
 
 public class PanelParameters extends PanelAtributesValue {
 
@@ -42,7 +43,7 @@ public class PanelParameters extends PanelAtributesValue {
     JComboBox jComboBoxRecombinationMethods = new JComboBox(recombinationMethods);
     JTextField jTextFieldProbRecombination = new JTextField(PROB_RECOMBINATION, TEXT_FIELD_LENGHT);
     JTextField jTextFieldProbMutation = new JTextField(PROB_MUTATION, TEXT_FIELD_LENGHT);
-    int testCase;
+    private TestCase testCase = TestCase.getInstace();
     //MORE PARAMETERS?
     
     public PanelParameters() {
@@ -64,7 +65,7 @@ public class PanelParameters extends PanelAtributesValue {
         jTextFieldTournamentSize.setEnabled(jComboBoxSelectionMethods.getSelectedIndex() == 0);
     }
 
-    public SelectionMethod<PredatorIndividual, GAPursuitDomainProblem> getSelectionMethod() {
+    public SelectionMethod<PredatorIndividual, GeneticAProblem> getSelectionMethod() {
         switch (jComboBoxSelectionMethods.getSelectedIndex()) {
             case 0:
                 return new Tournament<>(
@@ -106,12 +107,12 @@ public class PanelParameters extends PanelAtributesValue {
     		
     		setComponentsForRandomAdHocSolution(index);
     		
-    		testCase = index;
+    		testCase.setCurrent(index);
     	}break;
     	
     	case (2):{
     		setComponentsForRandomAdHocSolution(index);
-    		testCase = index;
+    		testCase.setCurrent(index);
     	}break;
     	case (3):{
     		
@@ -234,7 +235,7 @@ class IntegerTextField_KeyAdapter implements KeyListener {
 /*
  * labels.add(new JLabel("Seed: "));
         valueComponents.add(jTextFieldSeed);
-        jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
+        jTextFieldSeed.addKeyListenerw(new IntegerTextField_KeyAdapter(null));
 
         labels.add(new JLabel("Population size: "));
         valueComponents.add(jTextFieldN);

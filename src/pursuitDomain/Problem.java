@@ -14,6 +14,14 @@ public class Problem {
 	public Problem(int numEnvironmentRuns) {
 		this.numEnvironmentRuns = numEnvironmentRuns;
 	}
+	
+	public Environment getEnvironment() {
+		return environment;
+	}
+	
+	public int getNumEvironmentSimulations(){
+		return numEnvironmentRuns;
+	}
 
     
 }

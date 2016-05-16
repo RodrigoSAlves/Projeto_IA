@@ -1,7 +1,7 @@
 package gui;
 
 import pursuitDomain.PredatorIndividual;
-import pursuitDomain.GAPursuitDomainProblem;
+import pursuitDomain.GeneticAProblem;
 import pursuitDomain.TestCase;
 import pursuitDomain.PursuitDomainExperimentsFactory;
 import experiments.Experiment;
@@ -26,9 +26,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class MainFrame extends JFrame implements GAListener {
 
     private static final long serialVersionUID = 1L;
-    private GAPursuitDomainProblem problem;
+    private GeneticAProblem problem;
     private MainFrame instance;
-    private GeneticAlgorithm<PredatorIndividual, GAPursuitDomainProblem> ga;
+    private GeneticAlgorithm<PredatorIndividual, GeneticAProblem> ga;
     private PredatorIndividual bestInRun;
     private PursuitDomainExperimentsFactory experimentsFactory;
     private PanelTextArea problemPanel;
@@ -148,7 +148,7 @@ public class MainFrame extends JFrame implements GAListener {
     }
 // ----------------------------- Constructor End ---------------------------------------- //
     
-    public GAPursuitDomainProblem getProblem() {
+    public GeneticAProblem getProblem() {
         return problem;
     }
 
@@ -164,7 +164,7 @@ public class MainFrame extends JFrame implements GAListener {
         try {
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File dataSet = fc.getSelectedFile();
-                problem = GAPursuitDomainProblem.buildProblemFromFile(dataSet);
+                problem = GeneticAProblem.buildProblemFromFile(dataSet);
                 problemPanel.textArea.setText(problem.toString());
                 problemPanel.textArea.setCaretPosition(0);
                 buttonRun.setEnabled(true);
@@ -189,7 +189,7 @@ public class MainFrame extends JFrame implements GAListener {
             seriesAverage.clear();
             
             //Switch between modes of operation using the testCase Parameter
-            //Test Case 
+            
             
             
 
@@ -236,7 +236,7 @@ public class MainFrame extends JFrame implements GAListener {
 
     @Override
     public void generationEnded(GAEvent e) {
-        GeneticAlgorithm<PredatorIndividual, GAPursuitDomainProblem> source = e.getSource();
+        GeneticAlgorithm<PredatorIndividual, GeneticAProblem> source = e.getSource();
         bestIndividualPanel.textArea.setText(source.getBestInRun().toString());
         seriesBestIndividual.add(source.getGeneration(), source.getBestInRun().getFitness());
         seriesAverage.add(source.getGeneration(), source.getAverageFitness());
