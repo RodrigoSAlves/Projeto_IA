@@ -1,3 +1,7 @@
+/* Rodrigo Alves
+ * André Roque
+ */
+
 package pursuitDomain;
 
 import java.util.ArrayList;
