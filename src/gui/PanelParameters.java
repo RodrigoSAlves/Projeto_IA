@@ -46,6 +46,7 @@ public class PanelParameters extends PanelAtributesValue {
     JTextField jTextFieldProbMutation = new JTextField(PROB_MUTATION, TEXT_FIELD_LENGHT);
     JTextField jTextFieldNumberRuns = new JTextField(NUMBER_RUNS, TEXT_FIELD_LENGHT);
     private TestCase testCase = TestCase.getInstace();
+
     private MainFrame mainFrame;
 
     
@@ -59,12 +60,18 @@ public class PanelParameters extends PanelAtributesValue {
 	JLabel lblRecombProb = new JLabel("Recombination prob.: ");
 	JLabel lblMutationProb = new JLabel("Mutation prob.: ");
 	JLabel lblTestControl = new JLabel("Test Controler: ");
-	JLabel lblRuns = new JLabel("# of runs: ");
+	JLabel lblRuns = new JLabel ("# of runs: ");
+
+
+   
+
     //MORE PARAMETERS?
     
     public PanelParameters(MainFrame mainframe) {
     	this.mainFrame = mainframe;
         title = "Genetic algorithm parameters";
+
+
         labels.add(lblTestControl);
         valueComponents.add(jComboBoxSelectionControllers);
         jComboBoxSelectionControllers.addActionListener(new JComboxSelectionControllers_ActionAdapter(this));
@@ -151,13 +158,8 @@ public class PanelParameters extends PanelAtributesValue {
 	            valueComponents.add(jTextFieldSeed);
 	            jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
 
-	    		labels.add(lblRuns);
-	            valueComponents.add(jTextFieldNumberRuns);
-	            jTextFieldNumberRuns.addKeyListener(new IntegerTextField_KeyAdapter(null));
 	            this.configure();
 	            this.revalidate();
-	            mainFrame.setbtnRunEnabled();
-	            
 	    	}break;
 	    	
 	    	case (2):{
@@ -250,6 +252,24 @@ public class PanelParameters extends PanelAtributesValue {
         this.revalidate();
         labels.add(lblTestControl);
         valueComponents.add(jComboBoxSelectionControllers);
+
+		labels.remove(lblSeed);
+		valueComponents.remove(jTextFieldSeed);
+		labels.remove(lblPopSize);
+		valueComponents.remove(jTextFieldN);
+		labels.remove(lblNumberGens);
+		valueComponents.remove(jTextFieldGenerations);
+		labels.remove(lblSelectMethod);
+		valueComponents.remove(jComboBoxSelectionMethods);
+		labels.remove(lblTournmentSize);
+		valueComponents.remove(jTextFieldTournamentSize);
+		labels.remove(lblRecombMethod);
+		valueComponents.remove(jComboBoxRecombinationMethods);
+		labels.remove(lblRecombProb);
+		valueComponents.remove(jTextFieldProbRecombination);
+		labels.remove(lblMutationProb);
+		valueComponents.remove(jTextFieldProbMutation);
+
         this.configure();
         this.revalidate();
 	}

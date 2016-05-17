@@ -114,9 +114,8 @@ public class Environment {
 		initializeAgentsPositions(seed);
 		
 		for (int i = 0; i < maxIterations; i++) {
-			prey.getController().setAvailableActions(getFreeSorroundingCells(prey.getCell()));
+			prey.setAvailableActions(getFreeSorroundingCells(prey.getCell()));
 			prey.act(this);
-			System.out.println("prey:" + prey.getCell().getLine() + prey.getCell().getColumn());
 			for(int j = 0; j < predators.size(); j++)
 			{
 			predators.get(i).setAvailableActions(getFreeSorroundingCells(predators.get(i).getCell()));
