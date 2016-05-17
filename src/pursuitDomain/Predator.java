@@ -1,6 +1,9 @@
 package pursuitDomain;
 
 import java.awt.Color;
+import java.util.ArrayList;
+
+import controllers.Controller;
 
 public class Predator extends Agent {
    
@@ -9,12 +12,13 @@ public class Predator extends Agent {
 
     public Predator(Cell cell, Controller c) {
         super(cell, Color.BLUE);
-        
+        controller = c;
     }
 
     @Override
     public void act(Environment environment) {
         buildPerception(environment);
+        
         execute(decide(), environment);
     }
 
@@ -30,6 +34,11 @@ public class Predator extends Agent {
     
     public void setController(Controller c){
     	this.controller = c;
+    }
+    
+    public void setAvailableActions(ArrayList<Action> actions)
+    {
+    	controller.setAvailableActions(actions);
     }
 
     private void execute(Action action, Environment environment) {

@@ -2,14 +2,17 @@
  * André Roque
  */
 
-package pursuitDomain;
+package controllers;
+
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import pursuitDomain.Action;
+
 public class RandomController extends Controller {
 	
-	private Random random;
+	protected Random random;
 	
 	public RandomController(long seed) {
 		super();
@@ -17,8 +20,9 @@ public class RandomController extends Controller {
 	}
 	
 	public Action act()
-	{
-		return actionVector.get(random.nextInt(actionVector.size()));
+	{	
+		int index = random.nextInt(availableActions.size());
+		return availableActions.get(index);
 	}
 	
 }

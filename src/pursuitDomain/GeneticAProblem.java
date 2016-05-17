@@ -82,6 +82,12 @@ public class GeneticAProblem extends Problem implements GAProblem<PredatorIndivi
         return sb.toString();
     }
 
+	@Override
+	public void run() {
+		environment.simulate();
+		
+	}
+
 
 
 }

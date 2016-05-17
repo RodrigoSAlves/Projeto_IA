@@ -1,17 +1,21 @@
-package pursuitDomain;
+package controllers;
+
+import pursuitDomain.Action;
+import pursuitDomain.Environment;
+import pursuitDomain.Perception;
 
 public class AdHocController extends Controller{
 	
 	private Perception perception;
 	private Environment environment;
 	
-	
 	public AdHocController(Environment e) {
 		environment = e;
 	}
+	
 	@Override
 	public Action act() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	
@@ -19,6 +23,7 @@ public class AdHocController extends Controller{
 	{
 		this.perception = p;
 	}
+	
 	
 	
 

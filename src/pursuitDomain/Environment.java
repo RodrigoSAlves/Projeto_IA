@@ -6,6 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import controllers.AdHocController;
+import controllers.Controller;
+import controllers.RandomController;
+
 public class Environment {
 
 	// Control TestCase
@@ -16,15 +20,16 @@ public class Environment {
 	private final Prey prey;
 	private final int maxIterations;
 	private long seed;
-	private TestCase testCase = TestCase.getInstace();
+	private int testCase;
+	
 
 	// MORE ATTRIBUTES?
 
-	public Environment(int size, int maxIterations, double probPreyRests, int numPredators, int testCase, long seed) {
-
+	public Environment(int size, int maxIterations, float probPreyRests, int numPredators, long seed) {
+		this.testCase = TestCase.getInstace().getCurrent(); 
 		this.seed = seed;
 		this.maxIterations = maxIterations;
-
+		random = new Random ();
 		grid = new Cell[size][size];
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
@@ -54,7 +59,7 @@ public class Environment {
 		
 		Controller r;
 		
-		switch (testCase.getCurrent()) {
+		switch (testCase) {
 		case TestCase.RANDOM_CONTROLLER: {
 			r = new RandomController(seed);
 
@@ -109,10 +114,14 @@ public class Environment {
 		initializeAgentsPositions(seed);
 		
 		for (int i = 0; i < maxIterations; i++) {
+			prey.getController().setAvailableActions(getFreeSorroundingCells(prey.getCell()));
 			prey.act(this);
+			System.out.println("prey:" + prey.getCell().getLine() + prey.getCell().getColumn());
 			for(int j = 0; j < predators.size(); j++)
 			{
+			predators.get(i).setAvailableActions(getFreeSorroundingCells(predators.get(i).getCell()));
 			predators.get(i).act(this);
+			System.out.println(i + predators.get(i).getCell().getLine()+predators.get(i).getCell().getColumn());
 			}
 		}
 		
@@ -144,21 +153,21 @@ public class Environment {
 
 	// THIS METHOD *MAY* BE USED BY THE PREY IF YOU WANT TO SELECT THE RANDOM
 	// PREY MOVEMENT JUST BETWEEN FREE SORROUNDING CELLS.
-	public List<Cell> getFreeSorroundingCells(Cell cell) {
-		List<Cell> freeCells = new LinkedList<>();
+	public ArrayList<Action> getFreeSorroundingCells(Cell cell) {
+		ArrayList<Action> freeCellsAction = new ArrayList<>();
 		if (!getNorthCell(cell).hasAgent()) {
-			freeCells.add(getNorthCell(cell));
+			freeCellsAction.add(Action.NORTH);
 		}
 		if (!getSouthCell(cell).hasAgent()) {
-			freeCells.add(getSouthCell(cell));
+			freeCellsAction.add(Action.SOUTH);
 		}
 		if (!getEastCell(cell).hasAgent()) {
-			freeCells.add(getEastCell(cell));
+			freeCellsAction.add(Action.EAST);
 		}
 		if (!getWestCell(cell).hasAgent()) {
-			freeCells.add(getWestCell(cell));
+			freeCellsAction.add(Action.WEST);
 		}
-		return freeCells;
+		return freeCellsAction;
 	}
 
 	public Color getCellColor(int line, int column) {

@@ -1,7 +1,11 @@
 package pursuitDomain;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Random;
+
+import controllers.Controller;
+import controllers.RandomController;
 
 public class Prey extends Agent{
 
@@ -25,6 +29,15 @@ public class Prey extends Agent{
         }
     }
     
+    public Controller getController()
+    {
+    	return controller;
+    }
+    
+    public void setAvailableActions(ArrayList<Action> actions)
+    {
+    	controller.setAvailableActions(actions);
+    }
     private void execute(Action action, Environment environment) {
         Cell nextCell;
         if (action == Action.NORTH) {
@@ -41,4 +54,5 @@ public class Prey extends Agent{
             setCell(nextCell);
         }
     }
+    
 }
