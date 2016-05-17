@@ -2,11 +2,12 @@ package pursuitDomain;
 
 public class Perception {
 
-	private Position prayPos;
+	private Position preyPos;
 	private Position[] predPositions;
 	
-	public Perception(Position prayPos, Position[] predPositions) {
-		this.prayPos = prayPos;
+	public Perception(Position preyPos, Position[] predPositions) {
+		this.preyPos = preyPos;
 		this.predPositions = predPositions;
 	}
+
 }

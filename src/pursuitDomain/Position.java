@@ -2,8 +2,8 @@ package pursuitDomain;
 
 public class Position {
 
-	int y;
 	int x;
+	int y;
 	
 	public Position(int x, int y) {
 		this.x = x;

@@ -1,9 +1,11 @@
 package gui;
 
 import pursuitDomain.PredatorIndividual;
+import pursuitDomain.Problem;
 import pursuitDomain.GeneticAProblem;
 import pursuitDomain.TestCase;
 import pursuitDomain.PursuitDomainExperimentsFactory;
+import pursuitDomain.RandomAdHocProblem;
 import experiments.Experiment;
 import experiments.ExperimentEvent;
 import ga.GAEvent;
@@ -25,386 +27,389 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class MainFrame extends JFrame implements GAListener {
 
-    private static final long serialVersionUID = 1L;
-    private GeneticAProblem problem;
-    private MainFrame instance;
-    private GeneticAlgorithm<PredatorIndividual, GeneticAProblem> ga;
-    private PredatorIndividual bestInRun;
-    private PursuitDomainExperimentsFactory experimentsFactory;
-    private PanelTextArea problemPanel;
-    PanelTextArea bestIndividualPanel;
-    private PanelParameters panelParameters = new PanelParameters();
-    private JButton buttonDataSet = new JButton("Data set");
-    private JButton buttonRun = new JButton("Run");
-    private JButton buttonStop = new JButton("Stop");
-    private JButton buttonExperiments = new JButton("Experiments");
-    private JButton buttonRunExperiments = new JButton("Run experiments");
-    private JTextField textFieldExperimentsStatus = new JTextField("", 10);
-   
-    private XYSeries seriesBestIndividual;
-    private XYSeries seriesAverage;
-    private SwingWorker<Void, Void> worker;
+	private static final long serialVersionUID = 1L;
 
-    private PanelSimulation simulationPanel;
-    
-    private TestCase testCase = TestCase.getInstace();
-    
-    public MainFrame() {
-        try {
-            jbInit();
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
-    }
+	private GeneticAlgorithm<PredatorIndividual, GeneticAProblem> ga;
+	private PredatorIndividual bestInRun;
+	private PursuitDomainExperimentsFactory experimentsFactory;
+	private PanelTextArea problemPanel;
+	PanelTextArea bestIndividualPanel;
 
-    private void jbInit() throws Exception {
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setTitle("Pursuit Domain");
+	private PanelParameters panelParameters = new PanelParameters(this);
+	private JButton buttonDataSet = new JButton("Data set");
+	private JButton buttonRun = new JButton("Run");
+	private JButton buttonStop = new JButton("Stop");
+	private JButton buttonExperiments = new JButton("Experiments");
+	private JButton buttonRunExperiments = new JButton("Run experiments");
+	private JTextField textFieldExperimentsStatus = new JTextField("", 10);
 
-        //North Left Panel
-        JPanel panelNorthLeft = new JPanel(new BorderLayout());
-        panelNorthLeft.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder(""),
-                BorderFactory.createEmptyBorder(1, 1, 1, 1)));
+	private XYSeries seriesBestIndividual;
+	private XYSeries seriesAverage;
+	private SwingWorker<Void, Void> worker;
 
-        panelNorthLeft.add(panelParameters, java.awt.BorderLayout.WEST);
-        JPanel panelButtons = new JPanel();
-        panelButtons.add(buttonDataSet);
-        buttonDataSet.addActionListener(new ButtonDataSet_actionAdapter(this));
-        panelButtons.add(buttonRun);
-        buttonRun.setEnabled(false);
-        buttonRun.addActionListener(new ButtonRun_actionAdapter(this));
-        panelButtons.add(buttonStop);
-        buttonStop.setEnabled(false);
-        buttonStop.addActionListener(new ButtonStop_actionAdapter(this));
-        panelNorthLeft.add(panelButtons, java.awt.BorderLayout.SOUTH);
+	private Problem problem;
+	private MainFrame instance;
+	private PanelSimulation simulationPanel;
+	private TestCase testCase = TestCase.getInstace();
 
-        //North Right Panel - Chart creation
-        seriesBestIndividual = new XYSeries("Best");
-        seriesAverage = new XYSeries("Average");
+	public MainFrame() {
+		try {
+			jbInit();
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+		}
+	}
 
-        XYSeriesCollection dataset = new XYSeriesCollection();
-        dataset.addSeries(seriesBestIndividual);
-        dataset.addSeries(seriesAverage);
-        JFreeChart chart = ChartFactory.createXYLineChart("Evolution", // Title
-                "generation", // x-axis Label
-                "fitness", // y-axis Label
-                dataset, // Dataset
-                PlotOrientation.VERTICAL, // Plot Orientation
-                true, // Show Legend
-                true, // Use tooltips
-                false // Configure chart to generate URLs?
-        );
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder(""),
-                BorderFactory.createEmptyBorder(1, 1, 1, 1)));
-        // default size
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+	private void jbInit() throws Exception {
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setTitle("Pursuit Domain");
 
-        //North Panel
-        JPanel northPanel = new JPanel(new BorderLayout());
-        northPanel.add(panelNorthLeft, java.awt.BorderLayout.WEST);
-        northPanel.add(chartPanel, java.awt.BorderLayout.CENTER);
+		// North Left Panel
+		JPanel panelNorthLeft = new JPanel(new BorderLayout());
+		panelNorthLeft.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder(""),
+				BorderFactory.createEmptyBorder(1, 1, 1, 1)));
 
-        //Center panel       
-        problemPanel = new PanelTextArea("Problem data: ", 20, 40);
-        bestIndividualPanel = new PanelTextArea("Best solution: ", 20, 40);
-        JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.add(problemPanel, java.awt.BorderLayout.WEST);
-        centerPanel.add(bestIndividualPanel, java.awt.BorderLayout.CENTER);
+		panelNorthLeft.add(panelParameters, java.awt.BorderLayout.WEST);
+		JPanel panelButtons = new JPanel();
+		panelButtons.add(buttonDataSet);
+		buttonDataSet.addActionListener(new ButtonDataSet_actionAdapter(this));
+		panelButtons.add(buttonRun);
+		// porque esatira desligado? buttonRun.setEnabled(true);
+		buttonRun.addActionListener(new ButtonRun_actionAdapter(this));
+		panelButtons.add(buttonStop);
+		buttonStop.setEnabled(false);
+		buttonStop.addActionListener(new ButtonStop_actionAdapter(this));
+		panelNorthLeft.add(panelButtons, java.awt.BorderLayout.SOUTH);
 
-        //South Panel
-        JPanel southPanel = new JPanel();
-        southPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder(""),
-                BorderFactory.createEmptyBorder(1, 1, 1, 1)));
+		// North Right Panel - Chart creation
+		seriesBestIndividual = new XYSeries("Best");
+		seriesAverage = new XYSeries("Average");
 
-        southPanel.add(buttonExperiments);
-        buttonExperiments.addActionListener(new ButtonExperiments_actionAdapter(this));
-        southPanel.add(buttonRunExperiments);
-        buttonRunExperiments.setEnabled(false);
-        buttonRunExperiments.addActionListener(new ButtonRunExperiments_actionAdapter(this));
-        southPanel.add(new JLabel("Status: "));
-        southPanel.add(textFieldExperimentsStatus);
-        textFieldExperimentsStatus.setEditable(false);
+		XYSeriesCollection dataset = new XYSeriesCollection();
+		dataset.addSeries(seriesBestIndividual);
+		dataset.addSeries(seriesAverage);
+		JFreeChart chart = ChartFactory.createXYLineChart("Evolution", // Title
+				"generation", // x-axis Label
+				"fitness", // y-axis Label
+				dataset, // Dataset
+				PlotOrientation.VERTICAL, // Plot Orientation
+				true, // Show Legend
+				true, // Use tooltips
+				false // Configure chart to generate URLs?
+		);
+		ChartPanel chartPanel = new ChartPanel(chart);
+		chartPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder(""),
+				BorderFactory.createEmptyBorder(1, 1, 1, 1)));
+		// default size
+		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 
-        //Big left panel
-        JPanel bigLeftPanel = new JPanel(new BorderLayout());
-        bigLeftPanel.add(northPanel, java.awt.BorderLayout.NORTH);
-        bigLeftPanel.add(centerPanel, java.awt.BorderLayout.CENTER);
-        bigLeftPanel.add(southPanel, java.awt.BorderLayout.SOUTH);
-        
+		// North Panel
+		JPanel northPanel = new JPanel(new BorderLayout());
+		northPanel.add(panelNorthLeft, java.awt.BorderLayout.WEST);
+		northPanel.add(chartPanel, java.awt.BorderLayout.CENTER);
 
-        simulationPanel = new PanelSimulation(this);
+		// Center panel
+		problemPanel = new PanelTextArea("Problem data: ", 20, 40);
+		bestIndividualPanel = new PanelTextArea("Best solution: ", 20, 40);
+		JPanel centerPanel = new JPanel(new BorderLayout());
+		centerPanel.add(problemPanel, java.awt.BorderLayout.WEST);
+		centerPanel.add(bestIndividualPanel, java.awt.BorderLayout.CENTER);
 
-        //Global structure
-        JPanel globalPanel = new JPanel(new BorderLayout());
-        globalPanel.add(bigLeftPanel, java.awt.BorderLayout.WEST);
-        globalPanel.add(simulationPanel, java.awt.BorderLayout.EAST);
-        this.getContentPane().add(globalPanel);
+		// South Panel
+		JPanel southPanel = new JPanel();
+		southPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder(""),
+				BorderFactory.createEmptyBorder(1, 1, 1, 1)));
 
-        pack();
-    }
-// ----------------------------- Constructor End ---------------------------------------- //
-    
-    public GeneticAProblem getProblem() {
-        return problem;
-    }
+		southPanel.add(buttonExperiments);
+		buttonExperiments.addActionListener(new ButtonExperiments_actionAdapter(this));
+		southPanel.add(buttonRunExperiments);
+		buttonRunExperiments.setEnabled(false);
+		buttonRunExperiments.addActionListener(new ButtonRunExperiments_actionAdapter(this));
+		southPanel.add(new JLabel("Status: "));
+		southPanel.add(textFieldExperimentsStatus);
+		textFieldExperimentsStatus.setEditable(false);
 
-    public PredatorIndividual getBestInRun() {
-        return bestInRun;
-    }
-   
-    // btnData Listenner
-    public void buttonDataSet_actionPerformed(ActionEvent e) {
-        JFileChooser fc = new JFileChooser(new java.io.File("."));
-        int returnVal = fc.showOpenDialog(this);
+		// Big left panel
+		JPanel bigLeftPanel = new JPanel(new BorderLayout());
+		bigLeftPanel.add(northPanel, java.awt.BorderLayout.NORTH);
+		bigLeftPanel.add(centerPanel, java.awt.BorderLayout.CENTER);
+		bigLeftPanel.add(southPanel, java.awt.BorderLayout.SOUTH);
 
-        try {
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File dataSet = fc.getSelectedFile();
-                problem = GeneticAProblem.buildProblemFromFile(dataSet);
-                problemPanel.textArea.setText(problem.toString());
-                problemPanel.textArea.setCaretPosition(0);
-                buttonRun.setEnabled(true);
-            }
-        } catch (IOException e1) {
-            e1.printStackTrace(System.err);
-        } catch (java.util.NoSuchElementException e2) {
-            JOptionPane.showMessageDialog(this, "File format not valid", "Error!", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    //btn Run listenner
-    public void jButtonRun_actionPerformed(ActionEvent e) {
-        try {
-            if (problem == null) {
-                JOptionPane.showMessageDialog(this, "You must first choose a problem", "Error!", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            bestIndividualPanel.textArea.setText("");
-            seriesBestIndividual.clear();
-            seriesAverage.clear();
-            
-            //Switch between modes of operation using the testCase Parameter
-            
-            
-            
+		simulationPanel = new PanelSimulation(this);
 
-            Random random = new Random(Integer.parseInt(panelParameters.jTextFieldSeed.getText()));
-            ga = new GeneticAlgorithm<>(
-                    Integer.parseInt(panelParameters.jTextFieldN.getText()),
-                    Integer.parseInt(panelParameters.jTextFieldGenerations.getText()),
-                    panelParameters.getSelectionMethod(),
-                    panelParameters.getRecombinationMethod(),
-                    panelParameters.getMutationMethod(),
-                    random);
+		// Global structure
+		JPanel globalPanel = new JPanel(new BorderLayout());
+		globalPanel.add(bigLeftPanel, java.awt.BorderLayout.WEST);
+		globalPanel.add(simulationPanel, java.awt.BorderLayout.EAST);
+		this.getContentPane().add(globalPanel);
 
-            System.out.println(ga);
+		pack();
+	}
+	// ----------------------------- Constructor End
+	// ---------------------------------------- //
 
-            ga.addGAListener(this);
+	public Problem getProblem() {
+		return problem;
+	}
 
-            manageButtons(false, false, true, false, false, false);
+	public PredatorIndividual getBestInRun() {
+		return bestInRun;
+	}
 
-            worker = new SwingWorker<Void, Void>() {
-                @Override
-                public Void doInBackground() {
-                    try {
+	// btnData Listenner
+	public void buttonDataSet_actionPerformed(ActionEvent e) {
+		JFileChooser fc = new JFileChooser(new java.io.File("."));
+		int returnVal = fc.showOpenDialog(this);
 
-                        bestInRun = ga.run(problem);
+		try {
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File dataSet = fc.getSelectedFile();
+				problem = GeneticAProblem.buildProblemFromFile(dataSet);
+				problemPanel.textArea.setText(problem.toString());
+				problemPanel.textArea.setCaretPosition(0);
+				buttonRun.setEnabled(true);
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace(System.err);
+		} catch (java.util.NoSuchElementException e2) {
+			JOptionPane.showMessageDialog(this, "File format not valid", "Error!", JOptionPane.ERROR_MESSAGE);
+		}
+	}
 
-                    } catch (Exception e) {
-                        e.printStackTrace(System.err);
-                    }
-                    return null;
-                }
+	// btn Run listenner
+	public void jButtonRun_actionPerformed(ActionEvent e) {
+		try {
+			/*if (problem == null || testCase.getCurrent() == 0) {
+				JOptionPane.showMessageDialog(this, "You must first choose a problem", "Error!",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}*/
 
-                @Override
-                public void done() {
-                    manageButtons(true, true, false, true, experimentsFactory != null, true);
-                }
-            };
+			bestIndividualPanel.textArea.setText("");
+			seriesBestIndividual.clear();
+			seriesAverage.clear();
 
-            worker.execute();
+			// Switch between modes of operation using the testCase Parameter
 
-        } catch (NumberFormatException e1) {
-            JOptionPane.showMessageDialog(this, "Wrong parameters!", "Error!", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+			switch (testCase.getCurrent()) {
+			case (TestCase.RANDOM_CONTROLLER): {
 
-    @Override
-    public void generationEnded(GAEvent e) {
-        GeneticAlgorithm<PredatorIndividual, GeneticAProblem> source = e.getSource();
-        bestIndividualPanel.textArea.setText(source.getBestInRun().toString());
-        seriesBestIndividual.add(source.getGeneration(), source.getBestInRun().getFitness());
-        seriesAverage.add(source.getGeneration(), source.getAverageFitness());
-        if (worker.isCancelled()) {
-            e.setStopped(true);
-        }
-    }
-    
-    
-    @Override
-    public void runEnded(GAEvent e) {
-    }
+				problem = new RandomAdHocProblem(
+						Integer.parseInt(panelParameters.jTextFieldSeed.getText().toString().trim()),
+						Integer.parseInt(panelParameters.jTextFieldNumberRuns.getText().toString().trim()));
+				problem.run();
 
-    public void jButtonStop_actionPerformed(ActionEvent e) {
-        worker.cancel(true);
-    }
+			}
+			}
+		} catch (NumberFormatException e1) {
+			JOptionPane.showMessageDialog(this, "Wrong parameters!", "Error!", JOptionPane.ERROR_MESSAGE);
+		}
 
-    public void buttonExperiments_actionPerformed(ActionEvent e) {
-        JFileChooser fc = new JFileChooser(new java.io.File("."));
-        int returnVal = fc.showOpenDialog(this);
+		/*
+		 * Random random = new
+		 * Random(Integer.parseInt(panelParameters.jTextFieldSeed.getText()));
+		 * ga = new GeneticAlgorithm<>(
+		 * Integer.parseInt(panelParameters.jTextFieldN.getText()),
+		 * Integer.parseInt(panelParameters.jTextFieldGenerations.getText()),
+		 * panelParameters.getSelectionMethod(),
+		 * panelParameters.getRecombinationMethod(),
+		 * panelParameters.getMutationMethod(), random);
+		 * 
+		 * System.out.println(ga);
+		 * 
+		 * ga.addGAListener(this);
+		 * 
+		 * manageButtons(false, false, true, false, false, false);
+		 * 
+		 * worker = new SwingWorker<Void, Void>() {
+		 * 
+		 * @Override public Void doInBackground() { try {
+		 * 
+		 * // bestInRun = ga.run(problem);
+		 * 
+		 * } catch (Exception e) { e.printStackTrace(System.err); } return null;
+		 * }
+		 * 
+		 * @Override public void done() { manageButtons(true, true, false, true,
+		 * experimentsFactory != null, true); } };
+		 * 
+		 * worker.execute();
+		 * 
+		 * } catch (NumberFormatException e1) {
+		 * JOptionPane.showMessageDialog(this, "Wrong parameters!", "Error!",
+		 * JOptionPane.ERROR_MESSAGE); }
+		 */
+	}
 
-        try {
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                experimentsFactory = new PursuitDomainExperimentsFactory(fc.getSelectedFile());
-                manageButtons(true, problem != null, false, true, true, false);
-            }
-        } catch (IOException e1) {
-            e1.printStackTrace(System.err);
-        } catch (java.util.NoSuchElementException e2) {
-            JOptionPane.showMessageDialog(this, "File format not valid", "Error!", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+	@Override
+	public void generationEnded(GAEvent e) {
+		GeneticAlgorithm<PredatorIndividual, GeneticAProblem> source = e.getSource();
+		bestIndividualPanel.textArea.setText(source.getBestInRun().toString());
+		seriesBestIndividual.add(source.getGeneration(), source.getBestInRun().getFitness());
+		seriesAverage.add(source.getGeneration(), source.getAverageFitness());
+		if (worker.isCancelled()) {
+			e.setStopped(true);
+		}
+	}
 
-    public void buttonRunExperiments_actionPerformed(ActionEvent e) {
+	@Override
+	public void runEnded(GAEvent e) {
+	}
 
-        manageButtons(false, false, false, false, false, false);
-        textFieldExperimentsStatus.setText("Running");
+	public void jButtonStop_actionPerformed(ActionEvent e) {
+		worker.cancel(true);
+	}
 
-        worker = new SwingWorker<Void, Void>() {
-            @Override
-            public Void doInBackground() {
-                try {
-                    while (experimentsFactory.hasMoreExperiments()) {
-                        try {
+	public void setbtnRunEnabled() {
+		this.buttonRun.setEnabled(true);
+	}
 
-                            Experiment experiment = experimentsFactory.nextExperiment();
-                            experiment.run();
+	public void buttonExperiments_actionPerformed(ActionEvent e) {
+		JFileChooser fc = new JFileChooser(new java.io.File("."));
+		int returnVal = fc.showOpenDialog(this);
 
-                        } catch (IOException e1) {
-                            e1.printStackTrace(System.err);
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace(System.err);
-                }
-                return null;
-            }
+		try {
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				experimentsFactory = new PursuitDomainExperimentsFactory(fc.getSelectedFile());
+				manageButtons(true, problem != null, false, true, true, false);
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace(System.err);
+		} catch (java.util.NoSuchElementException e2) {
+			JOptionPane.showMessageDialog(this, "File format not valid", "Error!", JOptionPane.ERROR_MESSAGE);
+		}
+	}
 
-            @Override
-            public void done() {
-                manageButtons(true, problem != null, false, true, false, false);
-                textFieldExperimentsStatus.setText("Finished");
-            }
-        };
-        worker.execute();
-    }
+	public void buttonRunExperiments_actionPerformed(ActionEvent e) {
 
-    @Override
-    public void experimentEnded(ExperimentEvent e) {
-    }
+		manageButtons(false, false, false, false, false, false);
+		textFieldExperimentsStatus.setText("Running");
 
-    private void manageButtons(
-            boolean dataSet,
-            boolean run,
-            boolean stopRun,
-            boolean experiments,
-            boolean runExperiments,
-            boolean runEnvironment) {
+		worker = new SwingWorker<Void, Void>() {
+			@Override
+			public Void doInBackground() {
+				try {
+					while (experimentsFactory.hasMoreExperiments()) {
+						try {
 
-        buttonDataSet.setEnabled(dataSet);
-        buttonRun.setEnabled(run);
-        buttonStop.setEnabled(stopRun);
-        buttonExperiments.setEnabled(experiments);
-        buttonRunExperiments.setEnabled(runExperiments);
-        simulationPanel.setJButtonSimulateEnabled(runEnvironment);
-    }
+							Experiment experiment = experimentsFactory.nextExperiment();
+							experiment.run();
+
+						} catch (IOException e1) {
+							e1.printStackTrace(System.err);
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+				return null;
+			}
+
+			@Override
+			public void done() {
+				manageButtons(true, problem != null, false, true, false, false);
+				textFieldExperimentsStatus.setText("Finished");
+			}
+		};
+		worker.execute();
+	}
+
+	@Override
+	public void experimentEnded(ExperimentEvent e) {
+	}
+
+	private void manageButtons(boolean dataSet, boolean run, boolean stopRun, boolean experiments,
+			boolean runExperiments, boolean runEnvironment) {
+
+		buttonDataSet.setEnabled(dataSet);
+		buttonRun.setEnabled(run);
+		buttonStop.setEnabled(stopRun);
+		buttonExperiments.setEnabled(experiments);
+		buttonRunExperiments.setEnabled(runExperiments);
+		simulationPanel.setJButtonSimulateEnabled(runEnvironment);
+	}
 }
 
 class PanelTextArea extends JPanel {
 
-    JTextArea textArea;
+	JTextArea textArea;
 
-    public PanelTextArea(String title, int rows, int columns) {
-        textArea = new JTextArea(rows, columns);
-        setLayout(new BorderLayout());
-        add(new JLabel(title), java.awt.BorderLayout.NORTH);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        textArea.setEditable(false);
-        add(scrollPane);
-    }
+	public PanelTextArea(String title, int rows, int columns) {
+		textArea = new JTextArea(rows, columns);
+		setLayout(new BorderLayout());
+		add(new JLabel(title), java.awt.BorderLayout.NORTH);
+		JScrollPane scrollPane = new JScrollPane(textArea);
+		textArea.setEditable(false);
+		add(scrollPane);
+	}
 }
 
 class ButtonDataSet_actionAdapter implements ActionListener {
 
-    final private MainFrame adaptee;
+	final private MainFrame adaptee;
 
-    ButtonDataSet_actionAdapter(MainFrame adaptee) {
-        this.adaptee = adaptee;
-    }
+	ButtonDataSet_actionAdapter(MainFrame adaptee) {
+		this.adaptee = adaptee;
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        adaptee.buttonDataSet_actionPerformed(e);
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		adaptee.buttonDataSet_actionPerformed(e);
+	}
 }
 
 class ButtonRun_actionAdapter implements ActionListener {
 
-    final private MainFrame adaptee;
+	final private MainFrame adaptee;
 
-    ButtonRun_actionAdapter(MainFrame adaptee) {
-        this.adaptee = adaptee;
-    }
+	ButtonRun_actionAdapter(MainFrame adaptee) {
+		this.adaptee = adaptee;
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        adaptee.jButtonRun_actionPerformed(e);
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jButtonRun_actionPerformed(e);
+	}
 }
 
 class ButtonStop_actionAdapter implements ActionListener {
 
-    final private MainFrame adaptee;
+	final private MainFrame adaptee;
 
-    ButtonStop_actionAdapter(MainFrame adaptee) {
-        this.adaptee = adaptee;
-    }
+	ButtonStop_actionAdapter(MainFrame adaptee) {
+		this.adaptee = adaptee;
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        adaptee.jButtonStop_actionPerformed(e);
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jButtonStop_actionPerformed(e);
+	}
 }
 
 class ButtonExperiments_actionAdapter implements ActionListener {
 
-    final private MainFrame adaptee;
+	final private MainFrame adaptee;
 
-    ButtonExperiments_actionAdapter(MainFrame adaptee) {
-        this.adaptee = adaptee;
-    }
+	ButtonExperiments_actionAdapter(MainFrame adaptee) {
+		this.adaptee = adaptee;
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        adaptee.buttonExperiments_actionPerformed(e);
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		adaptee.buttonExperiments_actionPerformed(e);
+	}
 }
 
 class ButtonRunExperiments_actionAdapter implements ActionListener {
 
-    final private MainFrame adaptee;
+	final private MainFrame adaptee;
 
-    ButtonRunExperiments_actionAdapter(MainFrame adaptee) {
-        this.adaptee = adaptee;
-    }
+	ButtonRunExperiments_actionAdapter(MainFrame adaptee) {
+		this.adaptee = adaptee;
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        adaptee.buttonRunExperiments_actionPerformed(e);
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		adaptee.buttonRunExperiments_actionPerformed(e);
+	}
 }

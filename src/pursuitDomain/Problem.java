@@ -1,11 +1,11 @@
 package pursuitDomain;
 
-public class Problem {
+public abstract class Problem {
 
 	protected static final int environmentSize = 10;
 	protected static final int maxIterations = 20;
 	protected static final float probPreyRests = (float) 0.1;
-	protected static final double numPredators = 4;
+	protected static final int numPredators = 4;
 	
 	protected Environment environment;
 	
@@ -22,6 +22,8 @@ public class Problem {
 	public int getNumEvironmentSimulations(){
 		return numEnvironmentRuns;
 	}
+
+	public abstract void run();
 
     
 }

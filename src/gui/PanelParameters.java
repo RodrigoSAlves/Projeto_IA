@@ -31,6 +31,7 @@ public class PanelParameters extends PanelAtributesValue {
     public static final String TOURNAMENT_SIZE = "2";
     public static final String PROB_RECOMBINATION = "0.7";
     public static final String PROB_MUTATION = "0.1";
+    public static final String NUMBER_RUNS = "1";
     JTextField jTextFieldSeed = new JTextField(SEED, TEXT_FIELD_LENGHT);
     JTextField jTextFieldN = new JTextField(POPULATION_SIZE, TEXT_FIELD_LENGHT);
     JTextField jTextFieldGenerations = new JTextField(GENERATIONS, TEXT_FIELD_LENGHT);
@@ -43,7 +44,10 @@ public class PanelParameters extends PanelAtributesValue {
     JComboBox jComboBoxRecombinationMethods = new JComboBox(recombinationMethods);
     JTextField jTextFieldProbRecombination = new JTextField(PROB_RECOMBINATION, TEXT_FIELD_LENGHT);
     JTextField jTextFieldProbMutation = new JTextField(PROB_MUTATION, TEXT_FIELD_LENGHT);
+    JTextField jTextFieldNumberRuns = new JTextField(NUMBER_RUNS, TEXT_FIELD_LENGHT);
     private TestCase testCase = TestCase.getInstace();
+
+    private MainFrame mainFrame;
 
     
     //Labels
@@ -56,11 +60,18 @@ public class PanelParameters extends PanelAtributesValue {
 	JLabel lblRecombProb = new JLabel("Recombination prob.: ");
 	JLabel lblMutationProb = new JLabel("Mutation prob.: ");
 	JLabel lblTestControl = new JLabel("Test Controler: ");
+	JLabel lblRuns = new JLabel ("# of runs: ");
+
+
+   
+
     //MORE PARAMETERS?
     
-    public PanelParameters() {
+    public PanelParameters(MainFrame mainframe) {
+    	this.mainFrame = mainframe;
         title = "Genetic algorithm parameters";
-        
+
+
         labels.add(lblTestControl);
         valueComponents.add(jComboBoxSelectionControllers);
         jComboBoxSelectionControllers.addActionListener(new JComboxSelectionControllers_ActionAdapter(this));
@@ -146,6 +157,7 @@ public class PanelParameters extends PanelAtributesValue {
 	    		labels.add(lblSeed);
 	            valueComponents.add(jTextFieldSeed);
 	            jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
+
 	            this.configure();
 	            this.revalidate();
 	    	}break;
@@ -155,6 +167,10 @@ public class PanelParameters extends PanelAtributesValue {
 	        	labels.add(lblSeed);
 	            valueComponents.add(jTextFieldSeed);
 	            jTextFieldSeed.addKeyListener(new IntegerTextField_KeyAdapter(null));
+	            
+	    		labels.add(lblRuns);
+	            valueComponents.add(jTextFieldNumberRuns);
+	            jTextFieldNumberRuns.addKeyListener(new IntegerTextField_KeyAdapter(null));
 	            this.configure();
 	            this.revalidate();
 	    	}break;
@@ -236,6 +252,7 @@ public class PanelParameters extends PanelAtributesValue {
         this.revalidate();
         labels.add(lblTestControl);
         valueComponents.add(jComboBoxSelectionControllers);
+
 		labels.remove(lblSeed);
 		valueComponents.remove(jTextFieldSeed);
 		labels.remove(lblPopSize);
@@ -252,6 +269,7 @@ public class PanelParameters extends PanelAtributesValue {
 		valueComponents.remove(jTextFieldProbRecombination);
 		labels.remove(lblMutationProb);
 		valueComponents.remove(jTextFieldProbMutation);
+
         this.configure();
         this.revalidate();
 	}
