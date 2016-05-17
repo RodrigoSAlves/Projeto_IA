@@ -1,3 +1,17 @@
+<<<<<<< HEAD
+/experiments/
+/ga/
+/gui/
 /pursuitDomain/
+<<<<<<< HEAD
 /gui/
 /controllers/
+=======
+/statistics/
+/utils/
+/controllers/
+/problems/
+=======
+/pursuitDomain/
+>>>>>>> branch 'master' of https://github.com/RodrigoSAlves/Projeto_IA.git
+>>>>>>> branch 'master' of https://github.com/RodrigoSAlves/Projeto_IA.git
